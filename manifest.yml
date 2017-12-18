@@ -1,5 +1,6 @@
 ---
 applications:
 - name: dna-zendesk
-  memory: 512M
+  buildpack: python_buildpack 
+  memory: 128M
   instances: 1

@@ -10,6 +10,16 @@ ZENDESK_LISTENING_MAILBOX = os.getenv('ZENDESK_LISTENING_MAILBOX') if 'ZENDESK_L
 ZENDESK_EMAIL = os.getenv('ZENDESK_EMAIL') if 'ZENDESK_EMAIL' in os.environ else ''
 ZENDESK_TOKEN = os.getenv('ZENDESK_TOKEN') if 'ZENDESK_TOKEN' in os.environ else '' 
 ZENDESK_API_ENDPOINT = os.getenv('ZENDESK_API_ENDPOINT') if 'ZENDESK_API_ENDPOINT' in os.environ else ''
+ZENDESK_SCHEDULE = os.getenv('ZENDESK_SCHEDULE') if 'ZENDESK_SCHEDULE' in os.environ else 600 
+
+if not isinstance(ZENDESK_SCHEDULE, int):
+	if not ZENDESK_SCHEDULE.isdigit():
+		ZENDESK_SCHEDULE = 600
+	else:
+		ZENDESK_SCHEDULE = int(ZENDESK_SCHEDULE)
+
+if ZENDESK_SCHEDULE > 3600:
+	ZENDESK_SCHEDULE = 600
 
 
 def send_batch(ticket_ids = []):
@@ -19,13 +29,12 @@ def send_batch(ticket_ids = []):
 		
 		r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
 		print("Done")
-
 	return
 
 
 
 if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API_ENDPOINT:
-#	while True:
+	while True:
 		# get a list of suspended tickets
 		r = requests.get(ZENDESK_API_ENDPOINT + 'suspended_tickets.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN))
 		tickets = r.json()
@@ -49,7 +58,7 @@ if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API
 				send_batch(batch_tickets)
 
 
-#		time.sleep(60 - time.time() % 60)
+		time.sleep(ZENDESK_SCHEDULE - time.time() % ZENDESK_SCHEDULE)
 else:
 	if not ZENDESK_LISTENING_MAILBOX: print('ZENDESK_LISTENING_MAILBOX not set')
 	if not ZENDESK_EMAIL: print('ZENDESK_EMAIL not set')
