@@ -1,5 +1,7 @@
 # zendesk-unsuspender
 
+[![CircleCI](https://circleci.com/gh/govau/zendesk-unsuspender/tree/master.svg?style=svg)](https://circleci.com/gh/govau/zendesk-unsuspender/tree/master)
+
 Regularly interfaces with the Zendesk API to release specifically branded items in the suspended queue. This was required as Zendesk considers all emails sent from GovCMS as system generated and places the ticket into the suspended queue.
 
 Couldn't use Zendesk triggers as they do not apply to the suspended queue.
