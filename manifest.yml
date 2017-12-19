@@ -6,6 +6,7 @@ applications:
   instances: 1
   command: python3 unsuspend-tickets.py 
   no-route: true
+  health-check-type: process
   env:
     # run every 10 minutes
     ZENDESK_SCHEDULE: 600
