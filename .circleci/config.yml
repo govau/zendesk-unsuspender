@@ -7,6 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Python linter 
+          name: Checking syntax 
           command: python3 -m py_compile unsuspend-tickets.py
 

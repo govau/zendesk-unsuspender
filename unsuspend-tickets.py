@@ -8,9 +8,9 @@ import json
 
 ZENDESK_LISTENING_MAILBOX = os.getenv('ZENDESK_LISTENING_MAILBOX') if 'ZENDESK_LISTENING_MAILBOX' in os.environ else ''
 ZENDESK_EMAIL = os.getenv('ZENDESK_EMAIL') if 'ZENDESK_EMAIL' in os.environ else ''
-ZENDESK_TOKEN = os.getenv('ZENDESK_TOKEN') if 'ZENDESK_TOKEN' in os.environ else '' 
+ZENDESK_TOKEN = os.getenv('ZENDESK_TOKEN') if 'ZENDESK_TOKEN' in os.environ else ''
 ZENDESK_API_ENDPOINT = os.getenv('ZENDESK_API_ENDPOINT') if 'ZENDESK_API_ENDPOINT' in os.environ else ''
-ZENDESK_SCHEDULE = os.getenv('ZENDESK_SCHEDULE') if 'ZENDESK_SCHEDULE' in os.environ else 600 
+ZENDESK_SCHEDULE = os.getenv('ZENDESK_SCHEDULE') if 'ZENDESK_SCHEDULE' in os.environ else 600
 
 if not isinstance(ZENDESK_SCHEDULE, int):
 	if not ZENDESK_SCHEDULE.isdigit():
@@ -22,7 +22,7 @@ if ZENDESK_SCHEDULE > 3600:
 	ZENDESK_SCHEDULE = 600
 
 
-def send_batch(ticket_ids = []):
+def send_batch(ticket_ids=[]):
 	if len(ticket_ids) > 0:
 		print('Unsuspending: ' + str(ticket_ids))
 		ids = ",".join(str(x) for x in ticket_ids)
