@@ -16,5 +16,5 @@ Requires Python 3.x
 | ZENDESK_EMAIL | Visit Zendesk as an agent, go to settings > API. Enable Token Access, create a new token. |
 | ZENDESK_TOKEN | As above |
 | ZENDESK_API_ENDPOINT | `https://{subdomain}.zendesk.com/api/v2/` eg `https://domainnames.zendesk.com/api/v2/` |
-| ZENDESK_SCHEDULE | Run every x seconds. Eg 1200 = run every 20 minutes at 00, 20, and 40 minutes past the hour. Cannot be above 3600 |
+| ZENDESK_SCHEDULE | Run every x seconds. Eg 1200 = run every 20 minutes at 00, 20, and 40 minutes past the hour. Cannot be above 3600. Defaults to 600 (10min). |
 
