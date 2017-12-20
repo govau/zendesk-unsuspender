@@ -23,8 +23,10 @@ Requires Python 3.x
 ## Running locally
 If you don't have an instance on cloud.gov.au, you can run locally:
 
-`# export ZENDESK_LISTENING_MAILBOX="support@domainnames.zendesk.com"
+```
+# export ZENDESK_LISTENING_MAILBOX="support@domainnames.zendesk.com"
 # export ZENDESK_EMAIL="agent@test.gov.au"
 # export ZENDESK_TOKEN="1234"
 # export ZENDESK_API_ENDPOINT="https://domainnames.zendesk.com/api/v2/"
 # python3 unsuspend-tickets.py
+```
