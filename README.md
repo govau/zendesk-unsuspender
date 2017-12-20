@@ -20,3 +20,11 @@ Requires Python 3.x
 | ZENDESK_API_ENDPOINT | `https://{subdomain}.zendesk.com/api/v2/` eg `https://domainnames.zendesk.com/api/v2/` |
 | ZENDESK_SCHEDULE | Run every x seconds. Eg 1200 = run every 20 minutes at 00, 20, and 40 minutes past the hour. Cannot be above 3600. Defaults to 600 (10min). |
 
+## Running locally
+If you don't have an instance on cloud.gov.au, you can run locally:
+
+`# export ZENDESK_LISTENING_MAILBOX="support@domainnames.zendesk.com"
+# export ZENDESK_EMAIL="agent@test.gov.au"
+# export ZENDESK_TOKEN="1234"
+# export ZENDESK_API_ENDPOINT="https://domainnames.zendesk.com/api/v2/"
+# python3 unsuspend-tickets.py
