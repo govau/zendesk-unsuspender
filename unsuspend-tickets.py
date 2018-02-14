@@ -34,6 +34,10 @@ def send_batch(ticket_ids=[]):
 
 
 if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API_ENDPOINT:
+
+	# convert the ZENDESK_LISTENING_MAILBOX  into a list so we can provide multiple mailboxes to look over
+	ZENDESK_LISTENING_MAILBOX = [x.strip() for x in ZENDESK_LISTENING_MAILBOX.split(',')]
+
 	while True:
 		# get a list of suspended tickets
 		r = requests.get(ZENDESK_API_ENDPOINT + 'suspended_tickets.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN))
@@ -42,7 +46,7 @@ if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API
 
 		if tickets.get('suspended_tickets'):	
 			for ticket in tickets['suspended_tickets']:
-				if ticket.get('recipient') == ZENDESK_LISTENING_MAILBOX:
+				if ticket.get('recipient') in ZENDESK_LISTENING_MAILBOX:
 					unsuspend_tickets.append(ticket.get('id'))
 
 		# unsuspend the tickets

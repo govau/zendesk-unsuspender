@@ -14,7 +14,7 @@ Requires Python 3.x
 ## Configuration
 | Environment variable | Notes |
 | -------------------- | ----- |
-| ZENDESK_LISTENING_MAILBOX | The mailbox that Zendesk is setup to monitor for email traffic, eg `support@domainnames.zendesk.com` |
+| ZENDESK_LISTENING_MAILBOX | The mailbox that Zendesk is setup to monitor for email traffic, eg `support@domainnames.zendesk.com`. Separate multiple mailboxes with a comma. |
 | ZENDESK_EMAIL | Visit Zendesk as an agent, go to settings > API. Enable Token Access, create a new token. |
 | ZENDESK_TOKEN | As above |
 | ZENDESK_API_ENDPOINT | `https://{subdomain}.zendesk.com/api/v2/` eg `https://domainnames.zendesk.com/api/v2/` |
@@ -24,7 +24,7 @@ Requires Python 3.x
 If you don't have an instance on cloud.gov.au, you can run locally:
 
 ```
-# export ZENDESK_LISTENING_MAILBOX="support@domainnames.zendesk.com"
+# export ZENDESK_LISTENING_MAILBOX="support@domainnames.zendesk.com, webmaster@domainnames.zendesk.com"
 # export ZENDESK_EMAIL="agent@test.gov.au"
 # export ZENDESK_TOKEN="1234"
 # export ZENDESK_API_ENDPOINT="https://domainnames.zendesk.com/api/v2/"
