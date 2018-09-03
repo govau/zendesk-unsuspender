@@ -30,3 +30,9 @@ If you don't have an instance on cloud.gov.au, you can run locally:
 # export ZENDESK_API_ENDPOINT="https://domainnames.zendesk.com/api/v2/"
 # python3 unsuspend-tickets.py
 ```
+
+## Updating Python modules
+As per [Python buildpack doco](https://docs.cloudfoundry.org/buildpacks/python/index.html#-vendor-app-dependencies):
+```
+YOUR-APP-DIR# pip install --download vendor -r requirements.txt --no-binary :all:
+
