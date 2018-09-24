@@ -17,7 +17,7 @@ jobs:
       - run:
           name: Deploying to B-CLD
           command: |
-            cf login -a $CF_API_PROD -o $CF_ORG -s $CF_SPACE -u $CF_USERNAME -p $CF_PASSWORD_PROD
+            cf login -a $CF_PROD_API -o $CF_PROD_ORG -s $CF_PROD_SPACE -u $CF_PROD_USER -p $CF_PROD_PASS
             cf push
 workflows:
   version: 2
