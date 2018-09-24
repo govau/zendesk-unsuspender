@@ -34,7 +34,7 @@ def send_batch(zendesk_items=[]):
 	if len(zendesk_items) > 0:
 		ids = ",".join(str(x.id) for x in zendesk_items)
 
-		#r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
+		r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
 		print("Done")
 	return
 
