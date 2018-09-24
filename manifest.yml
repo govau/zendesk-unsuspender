@@ -3,7 +3,7 @@ applications:
 - name: zendesk-unsuspender
   buildpack: python_buildpack 
   memory: 128M
-  disk_quota: 128M
+  disk_quota: 512M
   instances: 1
   command: python3 unsuspend-tickets.py 
   no-route: true
