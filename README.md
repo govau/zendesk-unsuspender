@@ -31,6 +31,9 @@ If you don't have an instance on cloud.gov.au, you can run locally:
 # python3 unsuspend-tickets.py
 ```
 
+## Deploying to Prod
+All changes to master will initiate a CircleCI pipeline to production. For development changes, run them locally as per instructions above.
+
 ## Updating Python modules
 As per [Python buildpack doco](https://docs.cloudfoundry.org/buildpacks/python/index.html#-vendor-app-dependencies):
 ```

@@ -2,11 +2,29 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.6.6
     working_directory: ~/repo
     steps:
       - checkout
       - run:
           name: Checking syntax 
           command: python3 -m py_compile unsuspend-tickets.py
-
+  deploy-prod:
+    docker:
+      - image: govau/cf-cli
+    steps:
+      - checkout
+      - run:
+          name: Deploying to B-CLD
+          command: |
+            cf login -a $CF_PROD_API -o $CF_PROD_ORG -s $CF_PROD_SPACE -u $CF_PROD_USER -p $CF_PROD_PASS
+            cf push
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy-prod:
+          filters:
+            branches:
+              only:
+                - master

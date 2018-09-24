@@ -22,42 +22,59 @@ if ZENDESK_SCHEDULE > 3600:
 	ZENDESK_SCHEDULE = 600
 
 
-def send_batch(ticket_ids=[]):
-	if len(ticket_ids) > 0:
-		print('Unsuspending: ' + str(ticket_ids))
-		ids = ",".join(str(x) for x in ticket_ids)
-		
-		r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
+class ZendeskItem:
+	def __init__(self, id, subject):
+		self.id      = id
+		self.subject = subject
+	def  __repr__(self):
+		return "\nZendeskItem(id: %d, subject: %s)" % (self.id, self.subject)
+
+
+def send_batch(zendesk_items=[]):
+	if len(zendesk_items) > 0:
+		ids = ",".join(str(x.id) for x in zendesk_items)
+
+		#r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
 		print("Done")
 	return
 
 
-
 if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API_ENDPOINT:
 
-	# convert the ZENDESK_LISTENING_MAILBOX  into a list so we can provide multiple mailboxes to look over
+	# convert the ZENDESK_LISTENING_MAILBOX into a list so we can provide multiple mailboxes to look over
 	ZENDESK_LISTENING_MAILBOX = [x.strip() for x in ZENDESK_LISTENING_MAILBOX.split(',')]
 
 	while True:
-		# get a list of suspended tickets
-		r = requests.get(ZENDESK_API_ENDPOINT + 'suspended_tickets.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN))
-		tickets = r.json()
+		print("Running")
+
+		url = ZENDESK_API_ENDPOINT + 'suspended_tickets.json'
 		unsuspend_tickets = []
 
-		if tickets.get('suspended_tickets'):	
-			for ticket in tickets['suspended_tickets']:
-				if ticket.get('recipient') in ZENDESK_LISTENING_MAILBOX:
-					unsuspend_tickets.append(ticket.get('id'))
+		# get a list of suspended tickets
+		# Zendesk provides 100 per request then paginates remaining items
+		while url is not None:
+			print(url)
+			r = requests.get(url, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN))
+			tickets = r.json()
+
+			if tickets.get('suspended_tickets'):
+				for ticket in tickets['suspended_tickets']:
+					if ticket.get('recipient') in ZENDESK_LISTENING_MAILBOX:
+						unsuspend_tickets.append(ZendeskItem(ticket.get('id'), ticket.get('subject')))
+			
+			url = tickets.get('next_page')
 
 		# unsuspend the tickets
 		if len(unsuspend_tickets) > 0:
+			print(unsuspend_tickets)
+
 			batch_tickets = []
-			for i, id in enumerate(unsuspend_tickets):
+			for i, zendesk_item in enumerate(unsuspend_tickets):
 				# zendesk can only do 100 at a time
 				if len(batch_tickets) == 100:
 					send_batch(batch_tickets)
 					batch_tickets = []
-				batch_tickets.append(id)
+				batch_tickets.append(zendesk_item)
 			if len(batch_tickets) > 0:
 				send_batch(batch_tickets)
 
