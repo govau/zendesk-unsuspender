@@ -5,7 +5,7 @@ applications:
   memory: 128M
   disk_quota: 512M
   instances: 1
-  command: python unsuspend-tickets.py 
+  command: python3 unsuspend-tickets.py 
   no-route: true
   health-check-type: process
   env:
