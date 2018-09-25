@@ -21,7 +21,7 @@ jobs:
             cf push
 workflows:
   version: 2
-  test-deploy:
+  test-and-deploy:
     jobs:
       - test
       - deploy-prod:
