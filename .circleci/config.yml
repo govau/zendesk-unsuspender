@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/python:3.6.6
     working_directory: ~/repo
@@ -21,9 +21,12 @@ jobs:
             cf push
 workflows:
   version: 2
-  deploy:
+  test-deploy:
     jobs:
+      - test
       - deploy-prod:
+          requires:
+            - test
           filters:
             branches:
               only:
