@@ -34,8 +34,10 @@ If you don't have an instance on cloud.gov.au, you can run locally:
 ## Deploying to Prod
 All changes to master will initiate a CircleCI pipeline to production. For development changes, run them locally as per instructions above.
 
+Note: due to running one instance of Zendesk, we only need to run one instance of this app in production. Furthermore, items will remain in the suspended queue on availability issues to this app. 
+
 ## Updating Python modules
 As per [Python buildpack doco](https://docs.cloudfoundry.org/buildpacks/python/index.html#-vendor-app-dependencies):
 ```
 YOUR-APP-DIR# pip install --download vendor -r requirements.txt --no-binary :all:
-
+```
