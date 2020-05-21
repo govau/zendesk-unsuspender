@@ -26,13 +26,14 @@ if ZENDESK_SCHEDULE > 3600:
 
 
 class ZendeskItem:
-	def __init__(self, id, subject, from_name, from_email, content, created_at, brand_id):
+	def __init__(self, id, subject, from_name, from_email, content, created_at, recipient, brand_id):
 		self.id         = id
 		self.subject    = subject
 		self.from_name  = from_name
 		self.from_email = from_email
 		self.content    = content
 		self.created_at = created_at
+		self.recipient  = recipient
 		self.brand_id   = brand_id
 	
 	def  __repr__(self):
@@ -50,6 +51,7 @@ class ZendeskItem:
 			"name": self.from_name,
 			"email": self.from_email
 		},
+		"recipient": self.recipient,
 		"brand_id": self.brand_id,
 		"created_at": self.created_at
 	}
@@ -109,6 +111,7 @@ if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API
 							ticket.get('author').get('email'), 
 							ticket.get('content'), 
 							ticket.get('created_at'),
+							ticket.get('recipient'),
 							ticket.get('brand_id')
 						))
 
