@@ -1,4 +1,7 @@
-# Unsuspend Zendesk tickets
+# Create Zendesk tickets from those in the suspended queue
+#
+# See https://support.zendesk.com/hc/en-us/articles/360040599713-Upcoming-changes-to-email-behavior
+#
 # Requires Python 3.x
 
 import os
@@ -23,18 +26,57 @@ if ZENDESK_SCHEDULE > 3600:
 
 
 class ZendeskItem:
-	def __init__(self, id, subject):
-		self.id      = id
-		self.subject = subject
+	def __init__(self, id, subject, from_name, from_email, content, created_at, brand_id):
+		self.id         = id
+		self.subject    = subject
+		self.from_name  = from_name
+		self.from_email = from_email
+		self.content    = content
+		self.created_at = created_at
+		self.brand_id   = brand_id
+	
 	def  __repr__(self):
-		return "\nZendeskItem(id: %d, subject: %s)" % (self.id, self.subject)
+		return "\nZendeskItem(id: %d, subject: %s, from_name: %s, from_email: %s)" % (self.id, self.subject, self.from_name, self.from_email)
+	
+	def to_ticket_json(self):
+		return json.dumps(
+{
+	"ticket": { 
+		"subject": self.subject,
+		"comment": {
+			"body": self.content
+		},
+		"requester": {
+			"name": self.from_name,
+			"email": self.from_email
+		},
+		"brand_id": self.brand_id,
+		"created_at": self.created_at
+	}
+})
 
 
 def send_batch(zendesk_items=[]):
 	if len(zendesk_items) > 0:
-		ids = ",".join(str(x.id) for x in zendesk_items)
+		# the following unsuspends
+		#ids = ",".join(str(x.id) for x in zendesk_items)
+		#r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
+		
 
-		r = requests.put(ZENDESK_API_ENDPOINT + 'suspended_tickets/recover_many.json?ids=' + ids, auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
+		# instead of unsuspending, we now create a new ticket with data from the suspended ticket
+		for item in zendesk_items:
+			payload = ''
+			payload = item.to_ticket_json()
+
+			r = requests.post(ZENDESK_API_ENDPOINT + 'tickets.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data=payload, headers={'Content-Type': 'application/json'})
+			if r.status_code == 201:
+				# success, let's delete the ticket from the suspended queue
+				r = requests.delete(ZENDESK_API_ENDPOINT + 'suspended_tickets/' + str(item.id) + '.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
+
+			else:
+				print(f'API error, status code: {r.status_code!s}')
+				print(f'Attempted ticket creation with payload: {payload!s}')
+
 		print("Done")
 	return
 
@@ -60,8 +102,16 @@ if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API
 			if tickets.get('suspended_tickets'):
 				for ticket in tickets['suspended_tickets']:
 					if ticket.get('recipient') in ZENDESK_LISTENING_MAILBOX:
-						unsuspend_tickets.append(ZendeskItem(ticket.get('id'), ticket.get('subject')))
-			
+						unsuspend_tickets.append(ZendeskItem(
+							ticket.get('id'), 
+							ticket.get('subject'), 
+							ticket.get('author').get('name'), 
+							ticket.get('author').get('email'), 
+							ticket.get('content'), 
+							ticket.get('created_at'),
+							ticket.get('brand_id')
+						))
+
 			url = tickets.get('next_page')
 
 		# unsuspend the tickets

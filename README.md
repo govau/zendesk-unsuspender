@@ -8,6 +8,9 @@ Couldn't use Zendesk triggers as they do not apply to the suspended queue.
 
 This app runs on cloud.gov.au.
 
+## May 2020 Update
+Due to https://support.zendesk.com/hc/en-us/articles/360040599713-Upcoming-changes-to-email-behavior suspended tickets are no longer unsuspended as they do not trigger email notifications to end users. Instead, new tickets are created with data found in the suspended tickets. On success, the suspended ticket is tidied up and removed.
+
 ## Requirements
 Requires Python 3.x
 
@@ -34,7 +37,7 @@ If you don't have an instance on cloud.gov.au, you can run locally:
 ## Deploying to Prod
 All changes to master will initiate a CircleCI pipeline to production. For development changes, run them locally as per instructions above.
 
-Note: due to running one instance of Zendesk, we only need to run one instance of this app in production. Furthermore, items will remain in the suspended queue on availability issues to this app. 
+Note: due to running one instance of Zendesk, we only need to run one instance of this app in production. Furthermore, items will remain in the suspended queue on availability issues. 
 
 ## Updating Python modules
 As per [Python buildpack doco](https://docs.cloudfoundry.org/buildpacks/python/index.html#-vendor-app-dependencies):
