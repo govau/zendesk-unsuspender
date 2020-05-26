@@ -8,6 +8,7 @@ import os
 import time
 import requests
 import json
+import re
 
 ZENDESK_LISTENING_MAILBOX = os.getenv('ZENDESK_LISTENING_MAILBOX') if 'ZENDESK_LISTENING_MAILBOX' in os.environ else ''
 ZENDESK_EMAIL = os.getenv('ZENDESK_EMAIL') if 'ZENDESK_EMAIL' in os.environ else ''
@@ -35,7 +36,12 @@ class ZendeskItem:
 		self.created_at = created_at
 		self.recipient  = recipient
 		self.brand_id   = brand_id
-	
+
+		if re.search(r'@govcms\.gov\.au$', self.from_email):
+			applicant_email = re.search(r'(Account\/Registrant\ Email\:|Applicant\ Email\:) (.*)$', self.content, re.I|re.M)
+			if applicant_email:
+				self.from_email = applicant_email.group(2)
+
 	def  __repr__(self):
 		return "\nZendeskItem(id: %d, subject: %s, from_name: %s, from_email: %s)" % (self.id, self.subject, self.from_name, self.from_email)
 	
