@@ -9,7 +9,7 @@ Couldn't use Zendesk triggers as they do not apply to the suspended queue.
 This app runs on cloud.gov.au.
 
 ## May 2020 Update
-Due to https://support.zendesk.com/hc/en-us/articles/360040599713-Upcoming-changes-to-email-behavior suspended tickets are no longer unsuspended as they do not trigger email notifications to end users. Instead, new tickets are created with data found in the suspended tickets. On success, the suspended ticket is tidied up and removed.
+Due to https://support.zendesk.com/hc/en-us/articles/360040599713-Upcoming-changes-to-email-behavior suspended tickets are no longer unsuspended as the triggered email notification to end users does not include the original content. Instead, new tickets are created with data found in the suspended tickets. On success, the suspended ticket is tidied up and removed.
 
 ## Requirements
 Requires Python 3.x
