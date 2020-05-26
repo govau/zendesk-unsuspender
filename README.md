@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/govau/zendesk-unsuspender/tree/master.svg?style=svg)](https://circleci.com/gh/govau/zendesk-unsuspender/tree/master)
 
-Regularly interfaces with the Zendesk API to release specifically branded items in the suspended queue. This was required as Zendesk considers all emails sent from GovCMS as system generated and places the ticket into the suspended queue.
+Regularly interfaces with the Zendesk API to release specifically branded items from the suspended queue. This was required as Zendesk considers emails sent from GovCMS as system generated and places the ticket into the suspended queue. Check out `Detected email as being from a system user` from https://support.zendesk.com/hc/en-us/articles/115009659807
 
 Couldn't use Zendesk triggers as they do not apply to the suspended queue.
 
