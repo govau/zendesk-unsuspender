@@ -113,8 +113,8 @@ if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API
 						unsuspend_tickets.append(ZendeskItem(
 							ticket.get('id'), 
 							ticket.get('subject'), 
-							ticket.get('author').get('name'), 
-							ticket.get('author').get('email'), 
+							ticket['via']['source']['from']['name'],
+							ticket['via']['source']['from']['address'],
 							ticket.get('content'), 
 							ticket.get('created_at'),
 							ticket.get('recipient'),
