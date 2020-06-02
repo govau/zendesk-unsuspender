@@ -38,9 +38,9 @@ class ZendeskItem:
 		self.brand_id   = brand_id
 
 		if re.search(r'@govcms\.gov\.au$', self.from_email):
-			applicant_email = re.search(r'(Account\/Registrant\ Email\:|Applicant\ Email\:) (.*)$', self.content, re.I|re.M)
+			applicant_email = re.search(r'(Account\/Registrant\ Email\:|Applicant\ Email\:)\n?(.*)$', self.content, re.I|re.M)
 			if applicant_email:
-				self.from_email = applicant_email.group(2)
+				self.from_email = applicant_email.group(2).strip()
 
 	def  __repr__(self):
 		return "\nZendeskItem(id: %d, subject: %s, from_name: %s, from_email: %s)" % (self.id, self.subject, self.from_name, self.from_email)
