@@ -82,7 +82,8 @@ def send_batch(zendesk_items=[]):
 				r = requests.delete(ZENDESK_API_ENDPOINT + 'suspended_tickets/' + str(item.id) + '.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
 
 			else:
-				print(f'API error, status code: {r.status_code!s}')
+				print(f'API error - status code: {r.status_code!s}')
+				print(f'API error - body: {r.content!s}')
 				print(f'Attempted ticket creation with payload: {payload!s}')
 
 		print("Done")
