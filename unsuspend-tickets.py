@@ -82,7 +82,8 @@ def send_batch(zendesk_items=[]):
 				r = requests.delete(ZENDESK_API_ENDPOINT + 'suspended_tickets/' + str(item.id) + '.json', auth=(ZENDESK_EMAIL + '/token', ZENDESK_TOKEN), data={}, headers={'Content-Type': 'application/json'})
 
 			else:
-				print(f'API error, status code: {r.status_code!s}')
+				print(f'API error - status code: {r.status_code!s}')
+				print(f'API error - body: {r.content!s}')
 				print(f'Attempted ticket creation with payload: {payload!s}')
 
 		print("Done")
@@ -110,16 +111,17 @@ if ZENDESK_LISTENING_MAILBOX and ZENDESK_EMAIL and ZENDESK_TOKEN and ZENDESK_API
 			if tickets.get('suspended_tickets'):
 				for ticket in tickets['suspended_tickets']:
 					if ticket.get('recipient') in ZENDESK_LISTENING_MAILBOX:
-						unsuspend_tickets.append(ZendeskItem(
-							ticket.get('id'), 
-							ticket.get('subject'), 
-							ticket['via']['source']['from']['name'],
-							ticket['via']['source']['from']['address'],
-							ticket.get('content'), 
-							ticket.get('created_at'),
-							ticket.get('recipient'),
-							ticket.get('brand_id')
-						))
+						if ticket.get('cause').lower() != 'detected as spam':
+							unsuspend_tickets.append(ZendeskItem(
+								ticket.get('id'), 
+								ticket.get('subject'), 
+								ticket['via']['source']['from']['name'],
+								ticket['via']['source']['from']['address'],
+								ticket.get('content'), 
+								ticket.get('created_at'),
+								ticket.get('recipient'),
+								ticket.get('brand_id')
+							))
 
 			url = tickets.get('next_page')
 
